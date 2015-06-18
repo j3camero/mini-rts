@@ -16,6 +16,8 @@ app.get('/favicon.ico', function(req, res){
 
 io.on('connection', function(socket){
     socket.on('get_chunk', function(chunk_info){
+	console.log('get_chunk:');
+	console.log(chunk_info);
 	socket.emit('chunk_data', chunk_info);
     });
 });
