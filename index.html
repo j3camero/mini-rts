@@ -1,9 +1,12 @@
 <html>
 <head>
   <title>Mini RTS</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body onload="onload()">
-  <canvas id="game_canvas">Your browser is too old to play.</canvas>
+<body onload="onload()" onresize="onresize()">
+  <canvas id="game_canvas">
+    Your browser is too old to play.
+  </canvas>
   <script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
   <script src="client_chunk.js"></script>
   <script src="client.js"></script>
