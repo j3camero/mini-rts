@@ -61,9 +61,29 @@ function DoOneFrame() {
     setTimeout(function(){ DoOneFrame() }, 100);
 }
 
-function onload() {
-    onresize();
-    DoOneFrame();
+var mouse_is_down = false;
+var mouse_x = null;
+var mouse_y = null;
+
+function onmousedown(e) {
+    mouse_is_down = true;
+}
+
+function onmouseup(e) {
+    mouse_is_down = false;
+}
+
+function onmousemove(e) {
+    var x = e.clientX;
+    var y = e.clientY;
+    var dx = x - mouse_x;
+    var dy = y - mouse_y;
+    if (mouse_is_down) {
+	camera_x -= dx * tiles_per_pixel;
+	camera_y -= dy * tiles_per_pixel;
+    }
+    mouse_x = x;
+    mouse_y = y;
 }
 
 function onresize() {
@@ -71,4 +91,13 @@ function onresize() {
     var context = canvas.getContext('2d');
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
+}
+
+function onload() {
+    onresize();
+    var canvas = document.getElementById('game_canvas');
+    canvas.addEventListener('mousedown', onmousedown);
+    canvas.addEventListener('mouseup', onmouseup);
+    canvas.addEventListener('mousemove', onmousemove);
+    DoOneFrame();
 }
