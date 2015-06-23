@@ -5,7 +5,7 @@ var io = require('socket.io')(http);
 
 var chunk_size = 128;
 var chunks = {};
-var perlin_spectrum = [0, 0, 1, 2, 4, 8, 16, 32];
+var perlin_spectrum = [0, 0, 1, 2, 4, 8];
 var perlin_constraints = [];
 for (var i = 0; i < perlin_spectrum.length; ++i) {
     perlin_constraints.push({});
@@ -177,7 +177,7 @@ function GenerateChunk(i, j) {
     var rle_state = false;
     for (var y = 0; y < chunk_size; ++y) {
 	for (var x = 0; x < chunk_size; ++x) {
-	    var tile = terrain[x][y] > 0;
+	    var tile = terrain[x][y] < 1;
 	    tiles.push(tile);
 	    if (tile != rle_state) {
 		rle.push(rle_count);

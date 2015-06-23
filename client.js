@@ -6,8 +6,6 @@ function Key2D(i, j) {
 
 var socket = io();
 socket.on('chunk_data', function(chunk_data) {
-    console.log('chunk_data:');
-    console.log(chunk_data);
     var chunk = new ClientChunk(chunk_data.chunk_i, chunk_data.chunk_j,
 				chunk_data.rle);
     var key = Key2D(chunk_data.chunk_i, chunk_data.chunk_j);
@@ -28,6 +26,7 @@ var camera_x = 0;
 var camera_y = 0;
 var camera_angle = 0;
 var tiles_per_pixel = 0.5;
+var target_tiles_per_pixel = tiles_per_pixel;
 
 function DoOneFrame() {
     var canvas = document.getElementById('game_canvas');
@@ -58,7 +57,8 @@ function DoOneFrame() {
 	    context.drawImage(chunk.canvas, x, y, w, w);
 	}
     }
-    setTimeout(function(){ DoOneFrame() }, 100);
+    tiles_per_pixel += 0.2 * (target_tiles_per_pixel - tiles_per_pixel);
+    setTimeout(function(){ DoOneFrame() }, 1);
 }
 
 var mouse_is_down = false;
@@ -86,6 +86,14 @@ function onmousemove(e) {
     mouse_y = y;
 }
 
+function onmousewheel(e) {
+    if (e.wheelDelta > 0) {
+	target_tiles_per_pixel *= 0.666;
+    } else {
+	target_tiles_per_pixel *= 1.333;
+    }
+}
+
 function onresize() {
     var canvas = document.getElementById('game_canvas');
     var context = canvas.getContext('2d');
@@ -99,5 +107,6 @@ function onload() {
     canvas.addEventListener('mousedown', onmousedown);
     canvas.addEventListener('mouseup', onmouseup);
     canvas.addEventListener('mousemove', onmousemove);
+    canvas.addEventListener('mousewheel', onmousewheel);
     DoOneFrame();
 }
